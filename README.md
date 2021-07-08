@@ -4,7 +4,8 @@
 </div>
 
 <div align='center'>
-  <img alt='api.nino.sh Workflow' src='https://img.shields.io/github/workflow/status/NinoDiscord/API/Production/master?style=flat-square' />
+  <img alt='api.nino.sh Workflow' src='https://img.shields.io/github/workflow/status/NinoDiscord/API/Deploy/master?style=flat-square' />
+  <img alt='staging-api.nino.sh Workflow' src='https://img.shields.io/github/workflow/status/NinoDiscord/API/Deploy/staging?style=flat-square' />
 </div>
 
 <hr />
@@ -26,9 +27,9 @@ don't need this type of functionality...
 ### Prerequisites
 Before running your instance of **API**, you will need the following tools before starting:
 
-- [**Redis** v6.2+](https://redis.io) - Used for cache with the bot and **API**.
+- [**PostgreSQL** v10+](https://postgresql.org) - Used for retrieving data from the bot -> **API**. 
 - [**Git** v2.31+](https://git-scm.com/) - Useful for retrieving new updates with **API**.
-- [**Go** v1.16+](https://go.dev) - Language utilities + build-tools to run **API**
+- [**Go** v1.16+](https://go.dev) - Language build-tools to run **API**
 
 ## Building
 ```sh

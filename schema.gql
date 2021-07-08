@@ -1,0 +1,428 @@
+# List of queries available in api.nino.sh
+type Query {
+    # Queries a list of the guild's punishments by it's guild ID, authentication is required on this query.
+    # - `guild` (String): The guild's ID to fetch
+    # - Returns: The guild's warnings
+    punishments(guild: String!): [Punishment]!
+
+    # Queries a list of the guild's warnings by it's guild ID, authentication is required on this query.
+    # - `guild` (String): The guild's ID to fetch
+    # - Returns: The guild's warnings
+    warnings(guild: String!): [Warning]!
+
+    # Queries a blacklist by the ID, authentication is required on this query.
+    # - `id` (String): The ID to fetch
+    # - Returns: The blacklist entry or `null`.
+    blacklist(id: String!): Blacklist
+
+    # Queries a list of the guild's logging features by it's guild ID, authentication is required on this query.
+    # - `guild` (String): The guild's ID to fetch
+    # - Returns: The guild's warnings
+    logging(id: String!): Logging
+
+    # Queries this guild's automod features by it's guild ID, authentication is required on this query.
+    # - `id` [String]: The guild's ID to fetch
+    # - Returns: The guild's automod features
+    automod(id: String!): Automod
+
+    # Queries this guild's metadata by it's ID, authentication is required on this query.
+    # - `id` [String]: The guild's ID to fetch
+    # - Returns: The guild's metadata or `null` if Nino is not in that guild.
+    guild(id: String!): Guild
+
+    # Queries a list of the guild's cases by it's guild ID, authentication is required on this query.
+    # - `guild` (String): The guild's ID to fetch
+    # - Returns: The guild's cases
+    cases(guild: String!): [Case]!
+
+    # Queries this user's metadata by it's ID, authentication is required on this query.
+    # - id (String): The user's ID to fetch
+    # - Returns: The user's metadata or `null` if Nino has never interacted with this user.
+    user(id: String!): User
+}
+
+# List of mutations available in api.nino.sh
+# Note that all mutations require authentication or it'll fail.
+type Mutation {
+    # Toggles (enables/disables) a logging event in a guild.
+    # - id (String): The guild's ID
+    # - event (LoggingEvent): The event to toggle on / off.
+    # - Returns: A boolean if the changes were successful
+    toggleLoggingEvent(id: String!, event: LoggingEvent!): Boolean!
+
+    # Adds a punishment
+    # - punishment (AddPunishmentMetadata): The punishment metadata to insert
+    # - Returns: The punishment object
+    addPunishment(punishment: AddPunishmentMetadata!): Punishment!
+
+    # Updates the logging feature in a guild
+    # - metadata (UpdateLoggingMetadata): The logging metadata to update
+    # - Returns: A boolean if the changes were successful or not
+    updateLogging(metadata: UpdateLoggingMetadata!): Boolean!
+
+    # Adds a blacklist to the database
+    # - blacklist (AddBlacklistMetadata): The blacklist metadata to add
+    # - Returns: The blacklist object
+    addBlacklist(blacklist: AddBlacklistMetadata!): Blacklist!
+
+    # Adds a warning to the database
+    # - warning (AddWarningMetadata): The warning metadata to add
+    # - Returns: The warning object
+    addWarning(warning: AddWarningMetadata!): Warning!
+
+    # Toggles (enables/disables) the shortlinks automod feature of a guild
+    # - id (String): The guild's ID
+    # - Returns: A boolean if the changes were successful
+    toggleShortlinks(id: String!): Boolean!
+
+    # Toggles (enables/disables) the blacklist automod feature of a guild
+    # - id (String): The guild's ID
+    # - Returns: A boolean if the changes were successful
+    toggleBlacklist(id: String!): Boolean!
+
+    # Toggles (enables/disables) the mentions automod feature of a guild
+    # - id (String): The guild's ID
+    # - Returns: A boolean if the changes were successful
+    toggleMentions(id: String!): Boolean!
+
+    # Toggles (enables/disables) the logging feature of a guild
+    # - id (String): The guild's ID
+    # - Returns: A boolean if the changes were successful
+    toggleLogging(id: String!): Boolean!
+
+    # Toggles (enables/disables) the invites automod feature of a guild
+    # - id (String): The guild's ID
+    # - Returns: A boolean if the changes were successful
+    toggleInvites(id: String!): Boolean!
+
+    # Toggles (enables/disables) the dehoisting automod feature of a guild
+    # - id (String): The guild's ID
+    # - Returns: A boolean if the changes were successful
+    toggleDehoist(id: String!): Boolean!
+
+    # Toggles (enables/disables) the spam automod feature of a guild
+    # - id (String): The guild's ID
+    # - Returns: A boolean if the changes were successful
+    toggleSpam(id: String!): Boolean!
+
+    # Toggles (enables/disables) the raid automod feature of a guild
+    # - id (String): The guild's ID
+    # - Returns: A boolean if the changes were successful
+    toggleRaid(id: String!): Boolean!
+
+    # Removes a user prefix
+    # - id (String): The user's ID
+    # - prefix (String): The prefix to remove
+    # - Returns: A boolean if the changes were successful or not
+    removeGuildPrefix(id: String!, prefix: String!): Boolean!
+
+    # Adds a guild prefix into the guild's metadata table
+    # - id (String): The guild's ID
+    # - prefix (String): The prefix to insert
+    # - Returns: A boolean if the changes were successful or not
+    addGuildPrefix(id: String!, prefix: String!): Boolean!
+
+    # Removes a guild prefix
+    # - id (String): The guild's ID
+    # - prefix (String): The prefix to remove
+    # - Returns: A boolean if the changes were successful or not
+    removeUserPrefix(id: String!, prefix: String!): Boolean!
+
+    # Adds a user prefix into the user's metadata table
+    # - id (String): The user's ID
+    # - prefix (String): The prefix to insert
+    # - Returns: A boolean if the changes were successful or not
+    addUserPrefix(id: String!, prefix: String!): Boolean!
+
+    # Updates a guild's metadata
+    # - id (String): The guild's ID
+    # - Returns: A boolean if the changes were successful
+    updateGuild(metadata: UpdateGuildMetadata!): Boolean!
+
+    # Updates a user's metadata
+    # - id (String): The user's ID
+    # - Returns: A boolean if the changes were successful
+    updateUser(metadata: UpdateUserMetadata!): Boolean!
+}
+
+# Defines a guild in the database
+type Guild {
+    # The mod log channel ID, `null` if none is set
+    modlogChannelID: String
+
+    # The muted role ID, `null` if none is set
+    mutedRoleID: String
+
+    # A list of the guild's prefixes
+    prefixes: [String]!
+
+    # The language the guild has set, it'll use that locale in the dashboard
+    # instead of the user's locale unless the guild's locale is en_US
+    language: String!
+}
+
+# Represents a object of a guild's automod features
+# This doesn't include the blacklisted words, if any.
+type Automod {
+    # If the shortlinks automod feature is enabled,
+    # read more here: https://nino.sh/docs/automod#shortlinks
+    shortLinks: Boolean!
+
+    # If the blacklist / swears automod feature is enabled,
+    # read more here: https://nino.sh/docs/automod#blacklist
+    blacklist: Boolean!
+
+    # If the mentions automod feature is enabled,
+    # read more here: https://nino.sh/docs/automod#mentions
+    mentions: Boolean!
+
+    # If the invites automod feature is enabled,
+    # read more here: https://nino.sh/docs/automod#invites
+    invites: Boolean!
+
+    # If the dehoist automod feature is enabled,
+    # read more here: https://nino.sh/docs/automod#dehoisting
+    dehoist: Boolean!
+
+    # If the spam automod feature is enabled,
+    # read more here: https://nino.sh/docs/automod#spam
+    spam: Boolean!
+
+    # If the raid automod feature is enabled,
+    # read more here: https://nino.sh/docs/automod#raid
+    raid: Boolean!
+}
+
+# Represents the type the blacklist is handled by
+enum BlacklistType {
+    GUILD
+    USER
+}
+
+# Represents a blacklist in the database, this guild or user
+# cannot use any of Nino's features and will proceed to leave the
+# guild if a command is executed.
+type Blacklist {
+    # The reason of why the blacklist was created
+    reason: String
+
+    # The developer who issued the blacklist
+    issuer: String!
+
+    # The type of the blacklist
+    type: BlacklistType!
+}
+
+# Represents a mod-log case that has been committed by Nino.
+type Case {
+    # A list of attachments provided by the moderator
+    # on why the user was banned/kicked/etc
+    attachments: [String]!
+
+    # The moderator's ID
+    moderatorID: String!
+
+    # The message ID in the mod-log available
+    # This can return `null` if no mod-log was set.
+    messageID: String
+
+    # The victim's ID who committed this offense.
+    victimID: String!
+
+    # The reason on why the offense was took into action.
+    # This can return `null` if the reason was not provided.
+    reason: String
+
+    # The punishment that is linked to this case
+    type: PunishmentType!
+
+    # If the punishment was a soft-ban or not
+    soft: Boolean!
+
+    # The time in milliseconds that this ban/mute/warn will expire.
+    # This can return `null` if no timestamp was provided.
+    time: Int
+}
+
+# Represents a logging event that can occur
+enum LoggingEvent {
+    VOICE_MEMBER_DEAFENED
+    VOICE_CHANNEL_SWITCH
+    VOICE_MEMBER_MUTED
+    VOICE_CHANNEL_LEFT
+    VOICE_CHANNEL_JOIN
+    MESSAGE_UPDATE
+    MESSAGE_DELETE
+}
+
+# Represents a guild's logging features
+type Logging {
+    # A list of ignored channels to skip when logging.
+    ignoreChannels: [String]!
+
+    # A list of ignored users to skip when logging.
+    ignoreUsers: [String]!
+
+    # The logging channel, if any.
+    # This can return `null` if no logging channel was set.
+    channelID: String
+
+    # If the logging feature is enabled in this guild
+    enabled: Boolean!
+
+    # Any logging events that are enabled.
+    # This returns an empty array if no events are enabled.
+    events: [LoggingEvent]!
+}
+
+# Represents the punishment that was committed
+enum PunishmentType {
+    WARNING_REMOVED
+    VOICE_UNDEAFEN
+    WARNING_ADDED
+    VOICE_UNMUTE
+    VOICE_DEAFEN
+    VOICE_MUTE
+    UNMUTE
+    UNBAN
+    KICK
+    MUTE
+    BAN
+}
+
+# Represents a guild's punishments
+type Punishment {
+    # How many warnings before we have to punish a user for.
+    warnings: Int!
+
+    # The punishment index, for easy removal and updating.
+    index: Int!
+
+    # If the `type` is referred to a PunishmentType.Ban,
+    # this will return `true` or `false`. Otherwise,
+    # this will always be false.
+    soft: Boolean!
+
+    # The amount of time to remove the punishment
+    # off a user from.
+    time: Int
+
+    # The punishment type
+    type: PunishmentType!
+}
+
+# Represents a user in the database
+type User {
+    # The user's language that they set using the `locale` command.
+    # This will be also the user's language set on the site.
+    language: String!
+
+    # The user's prefixes, if any.
+    prefixes: [String]!
+}
+
+# Represents a user warning in the database
+type Warning {
+    # The guild this warning was committed on.
+    guildID: String!
+
+    # The reason of why this warning was issued.
+    reason: String
+
+    # The amount of warnings that the moderator added
+    amount: Int!
+
+    # The user who has this warning attached
+    userID: String!
+}
+
+# Represents a input for the `updateGuild` mutation
+input UpdateGuildMetadata {
+    # The mod log channel ID
+    modlogChannelID: String
+
+    # The muted role's ID
+    mutedRoleID: String
+
+    # The language to set
+    language: String
+
+    # The guild ID
+    id: String!
+}
+
+# Represents a input for the `updateUser` mutation
+input UpdateUserMetadata {
+    # The language to set
+    language: String
+
+    # The user's ID
+    id: String!
+}
+
+# Represents a input type for the `addPunishment` mutation
+input AddPunishmentMetadata {
+    # How many warnings before we have to punish a user for.
+    warnings: Int!
+
+    # If the `type` is referred to a PunishmentType.Ban,
+    # this will return `true` or `false`. Otherwise,
+    # this will always be false.
+    soft: Boolean!
+
+    # The amount of time to remove the punishment
+    # off a user from.
+    time: Int
+
+    # The punishment type
+    type: PunishmentType!
+
+    # The guild ID
+    id: String!
+}
+
+# Represents a input type for the `addWarning` mutation
+input AddWarningMetadata {
+    # The reason of why this warning was issued.
+    reason: String
+
+    # The amount of warnings that the moderator added
+    amount: Int!
+
+    # The victim to add the warning to
+    victim: String!
+
+    # The guild ID
+    id: String!
+}
+
+# Represents a input type for the `updateLogging` mutation
+input UpdateLoggingMetadata {
+    # A list of ignored channels to skip when logging.
+    ignoreChannels: [String]
+
+    # A list of ignored users to skip when logging.
+    ignoreUsers: [String]
+
+    # The logging channel, if any.
+    # This can return `null` if no logging channel was set.
+    channelID: String
+
+    # The guild ID
+    id: String!
+}
+
+# Represents a input type for the `addBlacklist` mutation
+input AddBlacklistMetadata {
+    # The reason of why the blacklist was created
+    reason: String
+
+    # The developer who issued the blacklist
+    issuer: String!
+
+    # The type of the blacklist
+    type: BlacklistType!
+
+    # The ID this blacklist belongs to
+    id: String!
+}
