@@ -19,7 +19,7 @@ func main() {
 	logrus.Info("Now bootstrapping API...")
 	postgres := managers.NewPostgresManager()
 	err = postgres.GetConnection(); if err != nil {
-		logrus.Fatalf("Unable to connect to Postgres: %o", err)
+		logrus.Fatalf("Unable to connect to Postgres: %v", err)
 		os.Exit(1)
 	}
 

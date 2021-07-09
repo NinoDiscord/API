@@ -10,6 +10,12 @@ type Query {
     # - Returns: The guild's warnings
     warnings(guild: String!): [Warning!]!
 
+    # Query a warning from a user and a guild, authentication is required on this query.
+    # - `guild` (String): The guild's ID to fetch
+    # - `user` (String): The user's ID to fetch
+    # - Returns: The list of the user's warnings
+    warning(guild: String!, user: String!): [Warning!]!
+
     # Queries a blacklist by the ID, authentication is required on this query.
     # - `id` (String): The ID to fetch
     # - Returns: The blacklist entry or `null`.
@@ -34,6 +40,12 @@ type Query {
     # - `guild` (String): The guild's ID to fetch
     # - Returns: The guild's cases
     cases(guild: String!): [Case!]!
+
+    # Queries a case from a guild by it's index, authentication is required on this query.
+    # - `guild` (String): The guild's ID to fetch
+    # - `index` (Number): The index to search for
+    # - Returns: The case that was found or `null` if nothing.
+    case(guild: String!, id: Int!): Case
 
     # Queries this user's metadata by it's ID, authentication is required on this query.
     # - id (String): The user's ID to fetch
@@ -88,6 +100,11 @@ type Mutation {
     # - blacklist (AddBlacklistMetadata): The blacklist metadata to add
     # - Returns: The blacklist object
     addBlacklist(blacklist: AddBlacklistMetadata!): Blacklist!
+
+    # Removes a blacklist to the database
+    # - id (String): The ID to unblacklist
+    # - Returns: The old blacklist object found
+    removeBlacklist(id: String!): Blacklist!
 
     # Adds a warning to the database
     # - warning (AddWarningMetadata): The warning metadata to add

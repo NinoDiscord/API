@@ -5,9 +5,8 @@ import (
 	"github.com/graph-gophers/graphql-go"
 	"io/ioutil"
 	"net/http"
+	"nino.sh/api/graphql/resolvers"
 )
-
-type Resolver struct {}
 
 type Manager struct {
 	Schema *graphql.Schema
@@ -30,7 +29,11 @@ func (gql *Manager) GenerateSchema() error {
 		return err
 	}
 
-	_ = string(contents)
+	opts := []graphql.SchemaOpt{graphql.UseFieldResolvers()}
+	items := string(contents)
+	schema := graphql.MustParseSchema(items, &resolvers.Resolver{}, opts...)
+
+	gql.Schema = schema
 	return nil
 }
 

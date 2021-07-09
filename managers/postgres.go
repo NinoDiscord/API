@@ -14,8 +14,6 @@ type PostgresManager struct {
 	Connection *sql.DB
 }
 
-var conn = NewPostgresManager()
-
 func NewPostgresManager() *PostgresManager {
 	return &PostgresManager{
 		Connection: nil,
