@@ -7,5 +7,5 @@ type Automod struct {
 	Invites    bool `json:"invites"`
 	Dehoist    bool `json:"dehoist"`
 	Spam       bool `json:"spam"`
-	Raid 	     bool `json:"raid"`
+	Raid 	   bool `json:"raid"`
 }
