@@ -7,5 +7,5 @@ type Case struct {
 	VictimID    string   `json:"victimID"`
 	Reason      *string  `json:"reason"`
 	Type        []string `json:"type"`
-	Time 		*int32   `json:"time"`
+	Time 		    *int32   `json:"time"`
 }

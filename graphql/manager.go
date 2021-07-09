@@ -14,9 +14,9 @@ type Manager struct {
 }
 
 type Body struct {
-	OperationName string 				 `json:"operationName"`
 	Variables     map[string]interface{} `json:"variables"`
-	Query         string  			     `json:"query"`
+	OperationName string `json:"operationName"`
+	Query         string `json:"query"`
 }
 
 func NewGraphQLManager() *Manager {
