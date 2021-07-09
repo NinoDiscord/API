@@ -3,12 +3,12 @@ type Query {
     # Queries a list of the guild's punishments by it's guild ID, authentication is required on this query.
     # - `guild` (String): The guild's ID to fetch
     # - Returns: The guild's warnings
-    punishments(guild: String!): [Punishment]!
+    punishments(guild: String!): [Punishment!]!
 
     # Queries a list of the guild's warnings by it's guild ID, authentication is required on this query.
     # - `guild` (String): The guild's ID to fetch
     # - Returns: The guild's warnings
-    warnings(guild: String!): [Warning]!
+    warnings(guild: String!): [Warning!]!
 
     # Queries a blacklist by the ID, authentication is required on this query.
     # - `id` (String): The ID to fetch
@@ -33,7 +33,7 @@ type Query {
     # Queries a list of the guild's cases by it's guild ID, authentication is required on this query.
     # - `guild` (String): The guild's ID to fetch
     # - Returns: The guild's cases
-    cases(guild: String!): [Case]!
+    cases(guild: String!): [Case!]!
 
     # Queries this user's metadata by it's ID, authentication is required on this query.
     # - id (String): The user's ID to fetch
@@ -44,6 +44,30 @@ type Query {
 # List of mutations available in api.nino.sh
 # Note that all mutations require authentication or it'll fail.
 type Mutation {
+    # Removes a user ID to the ignore users list
+    # - guild (String): The guild's ID
+    # - id (String): The user's ID
+    # - Returns: A boolean if the changes were successful
+    removeIgnoreUser(guild: String!, id: String!): Boolean!
+
+    # Adds a user ID to the ignore users list
+    # - guild (String): The guild's ID
+    # - id (String): The channel ID
+    # - Returns: A boolean if the changes were successful
+    addIgnoreUser(guild: String!, id: String!): Boolean!
+
+    # Removes a channel ID to the ignore channels list
+    # - guild (String): The guild's ID
+    # - id (String): The channel ID
+    # - Returns: A boolean if the changes were successful
+    removeIgnoreChannel(guild: String!, id: String!): Boolean!
+
+    # Adds a channel ID to the ignore channels list
+    # - guild (String): The guild's ID
+    # - id (String): The channel ID
+    # - Returns: A boolean if the changes were successful
+    addIgnoreChannel(guild: String!, id: String!): Boolean!
+
     # Toggles (enables/disables) a logging event in a guild.
     # - id (String): The guild's ID
     # - event (LoggingEvent): The event to toggle on / off.
@@ -154,7 +178,7 @@ type Guild {
     mutedRoleID: String
 
     # A list of the guild's prefixes
-    prefixes: [String]!
+    prefixes: [String!]!
 
     # The language the guild has set, it'll use that locale in the dashboard
     # instead of the user's locale unless the guild's locale is en_US
@@ -217,7 +241,7 @@ type Blacklist {
 type Case {
     # A list of attachments provided by the moderator
     # on why the user was banned/kicked/etc
-    attachments: [String]!
+    attachments: [String!]!
 
     # The moderator's ID
     moderatorID: String!
@@ -258,10 +282,10 @@ enum LoggingEvent {
 # Represents a guild's logging features
 type Logging {
     # A list of ignored channels to skip when logging.
-    ignoreChannels: [String]!
+    ignoreChannels: [String!]!
 
     # A list of ignored users to skip when logging.
-    ignoreUsers: [String]!
+    ignoreUsers: [String!]!
 
     # The logging channel, if any.
     # This can return `null` if no logging channel was set.
@@ -272,7 +296,7 @@ type Logging {
 
     # Any logging events that are enabled.
     # This returns an empty array if no events are enabled.
-    events: [LoggingEvent]!
+    events: [LoggingEvent!]!
 }
 
 # Represents the punishment that was committed
@@ -318,7 +342,7 @@ type User {
     language: String!
 
     # The user's prefixes, if any.
-    prefixes: [String]!
+    prefixes: [String!]!
 }
 
 # Represents a user warning in the database
@@ -398,12 +422,6 @@ input AddWarningMetadata {
 
 # Represents a input type for the `updateLogging` mutation
 input UpdateLoggingMetadata {
-    # A list of ignored channels to skip when logging.
-    ignoreChannels: [String]
-
-    # A list of ignored users to skip when logging.
-    ignoreUsers: [String]
-
     # The logging channel, if any.
     # This can return `null` if no logging channel was set.
     channelID: String
