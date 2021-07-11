@@ -63,13 +63,13 @@ const PlaygroundTemplate = `
 				<span class="title">GraphQL Playground</span>
 			</div>
 		</div>
-        <script>
-			document.addEventListener('load', () => GraphQLPlayground.init(document.getElementById('root'), {
+        <script defer>
+			GraphQLPlayground.init(document.getElementById('root'), {
 				endpoint: {{ .Endpoint }},
 				'general.betaUpdates': true,
 				'tracing.hideTracingResponse': false,
 				'tracing.tracingSupported': false
-			}));
+			});
 		</script>
     </body>
 </html>

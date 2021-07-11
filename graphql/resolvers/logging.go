@@ -1,5 +1,6 @@
 package resolvers
 
+/*
 func (r *Resolver) Logging() (string, error) {
 	return "hi!", nil
 }
@@ -27,3 +28,4 @@ func (r *Resolver) RemoveIgnoreChannel(guild string, id string) (string, error) 
 func (r *Resolver) AddIgnoreChannel(guild string, id string) (string, error) {
 	return guild + id, nil
 }
+*/

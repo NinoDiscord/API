@@ -6,9 +6,11 @@ import (
 	"io/ioutil"
 	"net/http"
 	"nino.sh/api/graphql/resolvers"
+	"nino.sh/api/managers"
 )
 
 type Manager struct {
+	Postgres *managers.PostgresManager
 	Schema *graphql.Schema
 }
 
@@ -18,8 +20,9 @@ type Body struct {
 	Query         string `json:"query"`
 }
 
-func NewGraphQLManager() *Manager {
+func NewGraphQLManager(postgres *managers.PostgresManager) *Manager {
 	return &Manager{
+		Postgres: postgres,
 		Schema: nil,
 	}
 }
@@ -31,7 +34,7 @@ func (gql *Manager) GenerateSchema() error {
 
 	opts := []graphql.SchemaOpt{graphql.UseFieldResolvers()}
 	items := string(contents)
-	schema := graphql.MustParseSchema(items, &resolvers.Resolver{}, opts...)
+	schema := graphql.MustParseSchema(items, &resolvers.Resolver{Db:gql.Postgres}, opts...)
 
 	gql.Schema = schema
 	return nil

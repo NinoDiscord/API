@@ -5,9 +5,12 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
+	"nino.sh/api/utils"
 	"os"
 	"strconv"
+	"time"
 )
 
 type PostgresManager struct {
@@ -54,4 +57,15 @@ func (pg *PostgresManager) GetConnection() error {
 	pg.Connection = conn
 
 	return nil
+}
+
+// GetPing returns the latency from calculating from selecting all guilds.
+func (db *PostgresManager) GetPing() int64 {
+	ping := time.Now()
+	rows, err := db.Connection.QueryContext(context.TODO(), "SELECT * FROM guilds;"); if err != nil {
+		return -1
+	}
+
+	defer utils.SwallowError(rows)
+	return time.Since(ping).Milliseconds()
 }

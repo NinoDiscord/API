@@ -1,6 +1,11 @@
 package resolvers
 
-func (r *Resolver) Automod() (string, error) {
+/*
+type Query struct {
+	ID string
+}
+
+func (r *Resolver) Automod(ctx context.Context, args Query) (string, error) {
 	return "Hi world :3", nil
 }
 
@@ -31,3 +36,4 @@ func (r *Resolver) ToggleSpam(id string) (string, error) {
 func (r *Resolver) ToggleRaid(id string) (string, error) {
 	return id, nil
 }
+*/

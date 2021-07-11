@@ -1,3 +1,7 @@
 package resolvers
 
-type Resolver struct {}
+import "nino.sh/api/managers"
+
+type Resolver struct {
+	Db *managers.PostgresManager
+}

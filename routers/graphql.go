@@ -9,7 +9,7 @@ import (
 	"os"
 )
 
-func NewGraphQLRouter(handler *graphql.Manager) *chi.Mux {
+func NewGraphQLRouter(handler *graphql.Manager) chi.Router {
 	router := chi.NewRouter()
 	router.Get("/", func (w http.ResponseWriter, r *http.Request) {
 		if os.Getenv("GO_ENV") == "development" {
@@ -18,7 +18,7 @@ func NewGraphQLRouter(handler *graphql.Manager) *chi.Mux {
 				http.Error(w, err.Error(), 500)
 			}
 
-			data := utils.PlaygroundTemplateData{Endpoint: r.URL.Path}
+			data := utils.PlaygroundTemplateData{Endpoint: "http://localhost:6645/graphql"}
 			if err := t.ExecuteTemplate(w, "index", data); err != nil {
 				http.Error(w, err.Error(), 500)
 			}
