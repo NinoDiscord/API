@@ -3,29 +3,27 @@ package resolvers
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"github.com/sirupsen/logrus"
 	"nino.sh/api/graphql/types"
 )
 
 // Guild queries a guild's metadata by it's ID, authentication is required on this query.
 func (r *Resolver) Guild(ctx context.Context, args struct{ ID string }) (*types.Guild, error) {
-	row := r.Db.Connection.QueryRowContext(ctx, fmt.Sprintf("SELECT * FROM guilds WHERE guild_id = %s;", args.ID))
+	stmt, err := r.Db.Connection.PrepareContext(ctx, "SELECT * FROM guilds WHERE guild_id = ?"); if err != nil {
+		logrus.Error(err)
+		return nil, err
+	}
 
 	var guild *types.Guild
-	err := row.Scan(&guild)
-
-	switch {
-	case err == sql.ErrNoRows:
-		return nil, nil
-
-	case err != nil:
-		logrus.Error(err.Error())
-		return nil, err
-
-	default:
-		return guild, nil
+	err = stmt.QueryRowContext(ctx, args.ID).Scan(&guild); if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		} else {
+			return nil, err
+		}
 	}
+
+	return guild, nil
 }
 
 /*
