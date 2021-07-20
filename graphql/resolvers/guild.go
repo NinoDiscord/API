@@ -5,23 +5,17 @@ import (
 	"nino.sh/api/graphql/types"
 )
 
-// Guild queries a guild's metadata by it's ID, authentication is required on this query.
+// Guild queries a guild's metadata by it's ID, authentication is not required on this query (since it doesn't have sensitive data).
 func (r *Resolver) Guild(ctx context.Context, args struct{ ID string }) (*types.Guild, error) {
-	guilds, err := r.Controller.GetGuilds(ctx, r.Db.Connection); if err != nil {
-		return nil, err
-	}
+	return r.Controller.GetGuild(ctx, r.Db.Connection, args.ID)
+}
 
-	var guild *types.Guild
-	for _, g := range guilds {
-		if g.ID == args.ID {
-			guild = g
-			break
-		}
-	}
+// AddGuildPrefix is a mutation to add a prefix to the database, authentication is required on this query.
+func (r *Resolver) AddGuildPrefix(ctx context.Context, args struct{ ID string; Prefix string }) (bool, error) {
+	return r.Controller.AddGuildPrefix(ctx, r.Db.Connection, args.ID, args.Prefix)
+}
 
-	if guild != nil {
-		return guild, nil
-	} else {
-		return nil, nil
-	}
+// RemoveGuildPrefix is a mutation to remove a prefix from the database, authentication is required on this query.
+func (r *Resolver) RemoveGuildPrefix(ctx context.Context, args struct{ ID string; Prefix string }) (bool, error) {
+	return r.Controller.RemoveGuildPrefix(ctx, r.Db.Connection, args.ID, args.Prefix)
 }

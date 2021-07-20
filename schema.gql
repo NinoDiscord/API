@@ -155,13 +155,13 @@ type Mutation {
     # - id (String): The user's ID
     # - prefix (String): The prefix to remove
     # - Returns: A boolean if the changes were successful or not
-    #removeGuildPrefix(id: String!, prefix: String!): Boolean!
+    removeGuildPrefix(id: String!, prefix: String!): Boolean!
 
     # Adds a guild prefix into the guild's metadata table
     # - id (String): The guild's ID
     # - prefix (String): The prefix to insert
     # - Returns: A boolean if the changes were successful or not
-    #addGuildPrefix(id: String!, prefix: String!): Boolean!
+    addGuildPrefix(id: String!, prefix: String!): Boolean!
 
     # Removes a guild prefix
     # - id (String): The guild's ID
@@ -178,7 +178,7 @@ type Mutation {
     # Updates a guild's metadata
     # - id (String): The guild's ID
     # - Returns: A boolean if the changes were successful
-    #updateGuild(metadata: UpdateGuildMetadata!): Boolean!
+    updateGuild(id: String!, metadata: UpdateGuildMetadata!): Boolean!
 
     # Updates a user's metadata
     # - id (String): The user's ID
@@ -390,9 +390,6 @@ input UpdateGuildMetadata {
 
     # The language to set
     language: String
-
-    # The guild ID
-    id: String!
 }
 
 # Represents a input for the `updateUser` mutation
