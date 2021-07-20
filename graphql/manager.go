@@ -5,6 +5,7 @@ import (
 	"github.com/graph-gophers/graphql-go"
 	"io/ioutil"
 	"net/http"
+	"nino.sh/api/controllers"
 	"nino.sh/api/graphql/resolvers"
 	"nino.sh/api/managers"
 )
@@ -34,7 +35,10 @@ func (gql *Manager) GenerateSchema() error {
 
 	opts := []graphql.SchemaOpt{graphql.UseFieldResolvers()}
 	items := string(contents)
-	schema := graphql.MustParseSchema(items, &resolvers.Resolver{Db:gql.Postgres}, opts...)
+	schema := graphql.MustParseSchema(items, &resolvers.Resolver{
+		Db: gql.Postgres,
+		Controller: &controllers.Controller{},
+	}, opts...)
 
 	gql.Schema = schema
 	return nil

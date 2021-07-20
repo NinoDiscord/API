@@ -5,4 +5,5 @@ type Guild struct {
 	MutedRoleID     *string  `json:"mutedRoleID"`
 	Prefixes        []string `json:"prefixes"`
 	Language        string   `json:"language"`
+	ID 				string   `json:"id"`
 }

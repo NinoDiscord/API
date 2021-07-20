@@ -200,6 +200,9 @@ type Guild {
     # The language the guild has set, it'll use that locale in the dashboard
     # instead of the user's locale unless the guild's locale is en_US
     language: String!
+
+    # Returns the guild's ID, this isn't needed in any practical application.
+    id: String!
 }
 
 # Represents a object of a guild's automod features
