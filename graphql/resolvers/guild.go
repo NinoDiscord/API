@@ -19,3 +19,13 @@ func (r *Resolver) AddGuildPrefix(ctx context.Context, args struct{ ID string; P
 func (r *Resolver) RemoveGuildPrefix(ctx context.Context, args struct{ ID string; Prefix string }) (bool, error) {
 	return r.Controller.RemoveGuildPrefix(ctx, r.Db.Connection, args.ID, args.Prefix)
 }
+
+// UpdateModLog is a mutation to denote a mod-log channel
+func (r *Resolver) UpdateModLog(ctx context.Context, args struct{ ID string; ModLogId *string }) (bool, error) {
+	return r.Controller.UpdateMutedRole(ctx, r.Db.Connection, args.ID, args.ModLogId)
+}
+
+// UpdateMutedRole is a mutation to denote a Muted role
+func (r *Resolver) UpdateMutedRole(ctx context.Context, args struct{ ID string; MutedRoleID *string }) (bool, error) {
+	return r.Controller.UpdateMutedRole(ctx, r.Db.Connection, args.ID, args.MutedRoleID)
+}

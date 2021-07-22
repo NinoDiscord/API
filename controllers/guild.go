@@ -110,8 +110,7 @@ func (c *Controller) RemoveGuildPrefix(
 	id string,
 	prefix string,
 ) (bool, error) {
-	guild, err := c.GetGuild(context, conn, id);
-	if err != nil {
+	guild, err := c.GetGuild(context, conn, id); if err != nil {
 		return false, err
 	}
 
@@ -126,6 +125,54 @@ func (c *Controller) RemoveGuildPrefix(
 	}
 
 	_, err = stmt.Query(prefix, guild.ID)
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+func (c *Controller) UpdateModLog(
+	context context.Context,
+	conn *sql.DB,
+	id string,
+	channelID *string,
+) (bool, error) {
+	guild, err := c.GetGuild(context, conn, id); if err != nil {
+		return false, err
+	}
+
+	stmt, err := conn.PrepareContext(context, `
+		UPDATE guilds SET modlog_channel_id = $1 WHERE guild_id = $2
+	`); if err != nil {
+		return false, err
+	}
+
+	_, err = stmt.Query(channelID, guild.ID)
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+func (c *Controller) UpdateMutedRole(
+	context context.Context,
+	conn *sql.DB,
+	id string,
+	roleID *string,
+) (bool, error) {
+	guild, err := c.GetGuild(context, conn, id); if err != nil {
+		return false, err
+	}
+
+	stmt, err := conn.PrepareContext(context, `
+		UPDATE guilds SET muted_role_id = $1 WHERE guild_id = $2
+	`); if err != nil {
+		return false, err
+	}
+
+	_, err = stmt.Query(roleID, guild.ID)
 	if err != nil {
 		return false, err
 	}
