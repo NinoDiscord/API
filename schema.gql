@@ -1,42 +1,42 @@
 # List of queries available in api.nino.sh
 type Query {
-    punishments(guild: String!): [Punishment!]!
-    warnings(guild: String!): [Warning!]!
-    warning(guild: String!, user: String!): [Warning!]!
-    blacklist(id: String!): Blacklist
-    logging(id: String!): Logging
-    automod(id: String!): Automod
+    #punishments(guild: String!): [Punishment!]!
+    #warnings(guild: String!): [Warning!]!
+    #warning(guild: String!, user: String!): [Warning!]!
+    #blacklist(id: String!): Blacklist
+    #logging(id: String!): Logging
+    #automod(id: String!): Automod
     guild(id: String!): Guild
-    cases(guild: String!): [Case!]!
-    case(guild: String!, id: Int!): Case
+    #cases(guild: String!): [Case!]!
+    #case(guild: String!, id: Int!): Case
     user(id: String!): User
 }
 
 # List of mutations available in api.nino.sh
 # Note that all mutations require authentication or it'll fail.
 type Mutation {
-    removeIgnoreUser(guild: String!, id: String!): Boolean!
-    addIgnoreUser(guild: String!, id: String!): Boolean!
-    removeIgnoreChannel(guild: String!, id: String!): Boolean!
-    addIgnoreChannel(guild: String!, id: String!): Boolean!
-    toggleLoggingEvent(id: String!, event: LoggingEvent!): Boolean!
-    addPunishment(punishment: AddPunishmentMetadata!): Punishment!
-    updateLogging(metadata: UpdateLoggingMetadata!): Boolean!
-    addBlacklist(blacklist: AddBlacklistMetadata!): Blacklist!
-    removeBlacklist(id: String!): Blacklist!
-    addWarning(warning: AddWarningMetadata!): Warning!
-    toggleShortlinks(id: String!): Boolean!
-    toggleBlacklist(id: String!): Boolean!
-    toggleMentions(id: String!): Boolean!
-    toggleLogging(id: String!): Boolean!
-    toggleInvites(id: String!): Boolean!
-    toggleDehoist(id: String!): Boolean!
-    toggleSpam(id: String!): Boolean!
-    toggleRaid(id: String!): Boolean!
+    #removeIgnoreUser(guild: String!, id: String!): Boolean!
+    #addIgnoreUser(guild: String!, id: String!): Boolean!
+    #removeIgnoreChannel(guild: String!, id: String!): Boolean!
+    #addIgnoreChannel(guild: String!, id: String!): Boolean!
+    #toggleLoggingEvent(id: String!, event: LoggingEvent!): Boolean!
+    #addPunishment(punishment: AddPunishmentMetadata!): Punishment!
+    #updateLogging(metadata: UpdateLoggingMetadata!): Boolean!
+    #addBlacklist(blacklist: AddBlacklistMetadata!): Blacklist!
+    #removeBlacklist(id: String!): Blacklist!
+    #addWarning(warning: AddWarningMetadata!): Warning!
+    #toggleShortlinks(id: String!): Boolean!
+    #toggleBlacklist(id: String!): Boolean!
+    #toggleMentions(id: String!): Boolean!
+    #toggleLogging(id: String!): Boolean!
+    #toggleInvites(id: String!): Boolean!
+    #toggleDehoist(id: String!): Boolean!
+    #toggleSpam(id: String!): Boolean!
+    #toggleRaid(id: String!): Boolean!
     removeGuildPrefix(id: String!, prefix: String!): Boolean!
     addGuildPrefix(id: String!, prefix: String!): Boolean!
-    removeUserPrefix(id: String!, prefix: String!): Boolean!
-    addUserPrefix(id: String!, prefix: String!): Boolean!
+    #removeUserPrefix(id: String!, prefix: String!): Boolean!
+    #addUserPrefix(id: String!, prefix: String!): Boolean!
     updateModLog(id: String!, modlogID: String): Boolean!
     updateMutedRole(id: String!, roleID: String): Boolean!
 }

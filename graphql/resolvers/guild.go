@@ -26,6 +26,6 @@ func (r *Resolver) UpdateModLog(ctx context.Context, args struct{ ID string; Mod
 }
 
 // UpdateMutedRole is a mutation to denote a Muted role
-func (r *Resolver) UpdateMutedRole(ctx context.Context, args struct{ ID string; MutedRoleID *string }) (bool, error) {
-	return r.Controller.UpdateMutedRole(ctx, r.Db.Connection, args.ID, args.MutedRoleID)
+func (r *Resolver) UpdateMutedRole(ctx context.Context, args struct{ ID string; RoleID *string }) (bool, error) {
+	return r.Controller.UpdateMutedRole(ctx, r.Db.Connection, args.ID, args.RoleID)
 }
