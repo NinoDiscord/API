@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"nino.sh/api/graphql"
 	"nino.sh/api/managers"
+	"nino.sh/api/redis"
 	"nino.sh/api/routers"
 	"nino.sh/api/utils"
 	"os"
@@ -25,14 +26,22 @@ func main() {
 		logrus.Infof("Running on region %s. :3", node)
 	}
 
-	logrus.Info("Now bootstrapping API...")
+	logrus.WithField("bootstrap", "Postgres").Info("Connecting to PostgreSQL...")
 	postgres := managers.NewPostgresManager()
 	err = postgres.GetConnection(); if err != nil {
-		logrus.Fatalf("Unable to connect to Postgres: %v", err)
+		logrus.WithField("bootstrap", "Postgres").Fatalf("Unable to connect to Postgres: %v", err)
 		os.Exit(1)
 	}
 
-	gql := graphql.NewGraphQLManager(postgres)
+	logrus.WithField("bootstrap", "Redis").Info("Connecting to Redis...")
+	r := redis.NewRedisClient()
+	if err := r.Connect(); err != nil {
+		logrus.WithField("bootstrap", "Redis").Fatalf("Unable to connect to Redis: %v", err)
+		os.Exit(1)
+	}
+
+	logrus.WithField("bootstrap", "GraphQL").Info("Creating GraphQL server...")
+	gql := graphql.NewGraphQLManager(postgres, r)
 	if err := gql.GenerateSchema(); err != nil {
 		panic(err)
 	}
@@ -42,6 +51,6 @@ func main() {
 	router.Mount("/health", routers.NewHealthRouter())
 	router.Mount("/graphql", routers.NewGraphQLRouter(gql))
 
-	logrus.Info("Listening at http://localhost:6645!")
+	logrus.WithField("bootstrap", "Http").Info("Listening at http://localhost:6645!")
 	log.Fatal(http.ListenAndServe(":6645", router))
 }

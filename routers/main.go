@@ -3,6 +3,7 @@ package routers
 import (
 	"github.com/go-chi/chi/v5"
 	"net/http"
+	"nino.sh/api/middlewares"
 	"nino.sh/api/utils"
 )
 
@@ -14,6 +15,7 @@ type MainResponse struct {
 func NewMainRouter() chi.Router {
 	router := chi.NewRouter()
 
+	router.Use(middlewares.Logging)
 	router.Get("/", func (w http.ResponseWriter, r *http.Request) {
 		utils.SendJson(w, 200, &MainResponse{
 			Message: "hello world :D",

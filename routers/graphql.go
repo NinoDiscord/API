@@ -5,12 +5,16 @@ import (
 	"html/template"
 	"net/http"
 	"nino.sh/api/graphql"
+	"nino.sh/api/middlewares"
 	"nino.sh/api/utils"
 	"os"
 )
 
 func NewGraphQLRouter(handler *graphql.Manager) chi.Router {
 	router := chi.NewRouter()
+
+	router.Use(middlewares.Logging)
+	router.Post("/", handler.ServeHTTP)
 	router.Get("/", func (w http.ResponseWriter, r *http.Request) {
 		if os.Getenv("GO_ENV") == "development" {
 			t := template.New("Nino: GraphQL Playground")
@@ -30,8 +34,6 @@ func NewGraphQLRouter(handler *graphql.Manager) chi.Router {
 			Message: "Cannot GET /graphql",
 		})
 	})
-
-	router.Post("/", handler.ServeHTTP)
 
 	return router
 }

@@ -8,11 +8,13 @@ import (
 	"nino.sh/api/controllers"
 	"nino.sh/api/graphql/resolvers"
 	"nino.sh/api/managers"
+	"nino.sh/api/redis"
 )
 
 type Manager struct {
 	Postgres *managers.PostgresManager
 	Schema *graphql.Schema
+	Redis *redis.Redis
 }
 
 type Body struct {
@@ -21,10 +23,11 @@ type Body struct {
 	Query         string `json:"query"`
 }
 
-func NewGraphQLManager(postgres *managers.PostgresManager) *Manager {
+func NewGraphQLManager(postgres *managers.PostgresManager, redis *redis.Redis) *Manager {
 	return &Manager{
 		Postgres: postgres,
 		Schema: nil,
+		Redis: redis,
 	}
 }
 
@@ -37,6 +40,7 @@ func (gql *Manager) GenerateSchema() error {
 	items := string(contents)
 	schema := graphql.MustParseSchema(items, &resolvers.Resolver{
 		Db: gql.Postgres,
+		Redis: gql.Redis,
 		Controller: &controllers.Controller{},
 	}, opts...)
 

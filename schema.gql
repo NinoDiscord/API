@@ -10,6 +10,7 @@ type Query {
     #cases(guild: String!): [Case!]!
     #case(guild: String!, id: Int!): Case
     user(id: String!): User
+    me: LoggedInUser
 }
 
 # List of mutations available in api.nino.sh
@@ -39,6 +40,8 @@ type Mutation {
     #addUserPrefix(id: String!, prefix: String!): Boolean!
     updateModLog(id: String!, modlogID: String): Boolean!
     updateMutedRole(id: String!, roleID: String): Boolean!
+    login(accessToken: String!): String
+    logout: Boolean!
 }
 
 # Defines a guild in the database
@@ -293,5 +296,13 @@ input AddBlacklistMetadata {
     type: BlacklistType!
 
     # The ID this blacklist belongs to
+    id: String!
+}
+
+type LoggedInUser {
+    discriminator: String!
+    username: String!
+    avatar: String!
+    entry: User!
     id: String!
 }
