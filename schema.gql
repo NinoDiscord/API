@@ -221,6 +221,9 @@ type User {
 
     # The user's prefixes, if any.
     prefixes: [String!]!
+
+    # The user's ID
+    id: String!
 }
 
 # Represents a user warning in the database

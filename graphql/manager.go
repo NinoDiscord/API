@@ -1,6 +1,7 @@
 package graphql
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/graph-gophers/graphql-go"
 	"io/ioutil"
@@ -55,7 +56,8 @@ func (gql *Manager) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res := gql.Schema.Exec(r.Context(), params.Query, params.OperationName, params.Variables)
+	ctx := context.WithValue(r.Context(), "token", r.Header.Get("Authorization"))
+	res := gql.Schema.Exec(ctx, params.Query, params.OperationName, params.Variables)
 	data, err := json.Marshal(res); if err != nil {
 		http.Error(w, err.Error(), 500)
 	}

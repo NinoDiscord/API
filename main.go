@@ -40,6 +40,7 @@ func main() {
 		os.Exit(1)
 	}
 
+	logrus.WithField("bootstrap", "Redis").Info("Connected to Redis! :3")
 	logrus.WithField("bootstrap", "GraphQL").Info("Creating GraphQL server...")
 	gql := graphql.NewGraphQLManager(postgres, r)
 	if err := gql.GenerateSchema(); err != nil {
