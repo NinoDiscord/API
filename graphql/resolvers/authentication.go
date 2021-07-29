@@ -3,6 +3,7 @@ package resolvers
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/go-redis/redis/v8"
 	"github.com/golang-jwt/jwt"
 	"github.com/sirupsen/logrus"
@@ -19,6 +20,7 @@ func (r *Resolver) CheckAuthorization(token string) error {
 
 		return signingKey, nil
 	}); if err != nil {
+		fmt.Println(err)
 		return err
 	}
 

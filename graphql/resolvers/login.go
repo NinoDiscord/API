@@ -26,6 +26,19 @@ type User struct {
 	ID            string  `json:"id"`
 }
 
+type TokenizedUser struct {
+	Entry *types.User
+	User  User
+}
+
+func (u *TokenizedUser) UnmarshalBinary(data []byte) error {
+	return json.Unmarshal(data, u)
+}
+
+func (u *TokenizedUser) MarshalBinary() ([]byte, error) {
+	return json.Marshal(u)
+}
+
 func (r *Resolver) Login(ctx context.Context, args struct{ AccessToken string }) (*string, error) {
 	var signingKey = []byte(os.Getenv("SIGNING_KEY"))
 
@@ -57,7 +70,6 @@ func (r *Resolver) Login(ctx context.Context, args struct{ AccessToken string })
 		return nil, err
 	}
 
-	claims["access_token"] = args.AccessToken
 	claims["entry"] = entry
 	claims["user"] = user
 
@@ -66,7 +78,10 @@ func (r *Resolver) Login(ctx context.Context, args struct{ AccessToken string })
 	}
 
 	// insert it to redis
-	if err := r.Redis.Connection.HSet(ctx, "nino:sessions", token.Raw, claims).Err(); err != nil {
+	if err := r.Redis.Connection.HSet(ctx, "nino:sessions", token.Raw, &TokenizedUser{
+		User: user,
+		Entry: entry,
+	}).Err(); err != nil {
 		return nil, err
 	}
 

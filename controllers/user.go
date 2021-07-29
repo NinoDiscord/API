@@ -13,8 +13,7 @@ func (c *Controller) GetUsers(
 	connection *sql.DB,
 ) ([]*types.User, error) {
 	stmt, err := connection.PrepareContext(ctx, `
-		select users.user_id, users.language, user.prefixes
-		from users
+		select user_id, language, prefixes from users
     `); if err != nil {
     	return nil, err
 	}

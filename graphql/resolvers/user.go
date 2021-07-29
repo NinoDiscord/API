@@ -7,10 +7,7 @@ import (
 
 // User queries a user's metadata by it's ID, authentication is required on this query.
 func (r *Resolver) User(ctx context.Context, args struct { ID string }) (*types.User, error) {
-	row := r.Db.Connection.QueryRowContext(ctx, "SELECT * FROM guilds WHERE guild_id = ?", args.ID)
-
-	var user *types.User
-	if err := row.Scan(&user); err != nil {
+	user, err := r.Controller.GetUser(ctx, r.Db.Connection, args.ID); if err != nil {
 		return nil, err
 	}
 
