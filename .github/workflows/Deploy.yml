@@ -1,0 +1,41 @@
+name: Deploy to Kubernetes
+on:
+  push:
+    branches:
+      - 'feature/**'
+      - 'issue/gh-**'
+      - master
+    paths-ignore:
+      - '.github/**'
+      - .gitignore
+      - LICENSE
+      - '**.md'
+      - renovate.json
+      - schema.gql
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Login
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login registry.floofy.dev -u august --password-stdin
+      - name: Build
+        run: docker build -t registry.floofy.dev/nino/api:${{github.sha}} .
+      - name: Push
+        run: docker push registry.floofy.dev/nino/api:${{github.sha}}
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login
+        run: |
+          mkdir ~/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" > ~/.kube/config
+      - name: Set image
+        run: |
+          kubectl set image deployment/nino-prod-api nino-prod-api=registry.floofy.dev/nino/api:${{github.sha}}
+          kubectl set image deployment/nino-edge-api nino-edge-api=registry.floofy.dev/nino/api:${{github.sha}}
+      - name: Rollout status
+        run: |
+          kubectl rollout status deployment/nino-prod-api
+          kubectl rollout status deployment/nino-edge-api
