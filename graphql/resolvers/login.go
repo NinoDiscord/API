@@ -42,7 +42,7 @@ func (u *TokenizedUser) MarshalBinary() ([]byte, error) {
 func (r *Resolver) Login(ctx context.Context, args struct{ AccessToken string }) (*string, error) {
 	var signingKey = []byte(os.Getenv("SIGNING_KEY"))
 
-	token := jwt.New(jwt.SigningMethodHS512)
+	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)
 
 	client := http.Client{}
@@ -78,13 +78,14 @@ func (r *Resolver) Login(ctx context.Context, args struct{ AccessToken string })
 	}
 
 	// insert it to redis
-	if err := r.Redis.Connection.HSet(ctx, "nino:sessions", token.Raw, &TokenizedUser{
+	if _, err := r.Redis.Connection.HSet(ctx, "nino:sessions", t, &TokenizedUser{
 		User: user,
 		Entry: entry,
-	}).Err(); err != nil {
+	}).Result(); err != nil {
 		return nil, err
 	}
 
+	// TODO: add expiration instead of manually deleting it on request
 	return &t, nil
 }
 

@@ -14,21 +14,23 @@ import (
 	"os"
 )
 
-func main() {
+func init() {
 	logrus.SetFormatter(&logrus.TextFormatter{})
 	err := godotenv.Load(".env"); if err != nil {
 		panic(err)
 	}
 
 	utils.ValidateEnv()
+}
 
+func main() {
 	node := os.Getenv("REGION"); if node != "" {
 		logrus.Infof("Running on region %s. :3", node)
 	}
 
 	logrus.WithField("bootstrap", "Postgres").Info("Connecting to PostgreSQL...")
 	postgres := managers.NewPostgresManager()
-	err = postgres.GetConnection(); if err != nil {
+	if err := postgres.GetConnection(); err != nil {
 		logrus.WithField("bootstrap", "Postgres").Fatalf("Unable to connect to Postgres: %v", err)
 		os.Exit(1)
 	}

@@ -10,9 +10,8 @@ import (
 	"os"
 )
 
-var signingKey = []byte(os.Getenv("SIGNING_KEY"))
-
 func (r *Resolver) CheckAuthorization(token string) error {
+	signingKey := []byte(os.Getenv("SIGNING_KEY"))
 	t, err := jwt.Parse(token, func (token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, errors.New("cannot detect jwt")
@@ -20,12 +19,16 @@ func (r *Resolver) CheckAuthorization(token string) error {
 
 		return signingKey, nil
 	}); if err != nil {
-		fmt.Println(err)
 		return err
 	}
 
 	if t.Valid {
+		fmt.Println(t.Raw)
 		if err := r.Redis.Connection.HGet(context.TODO(), "nino:sessions", t.Raw).Err(); err != nil {
+			if err == redis.Nil {
+				return errors.New("token is invalid, please re-login! :D")
+			}
+
 			return err
 		}
 
