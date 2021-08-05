@@ -7,4 +7,4 @@ RUN go build
 FROM alpine:latest
 WORKDIR /opt/Nino/api
 COPY --from=builder /api /opt/Nino/api
-CMD ["/app/api"]
+CMD ["/opt/Nino/api/api"]
