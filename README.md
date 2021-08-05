@@ -4,8 +4,7 @@
 </div>
 
 <div align='center'>
-  <img alt='api.nino.sh Workflow' src='https://img.shields.io/github/workflow/status/NinoDiscord/API/Deploy/master?style=flat-square' />
-  <img alt='staging-api.nino.sh Workflow' src='https://img.shields.io/github/workflow/status/NinoDiscord/API/Deploy/staging?style=flat-square' />
+  <img alt='api.nino.sh Workflow' src='https://img.shields.io/github/workflow/status/NinoDiscord/API/Deploy%20to%20Kubernetes/master?style=flat-square' />
 </div>
 
 <hr />
@@ -35,6 +34,7 @@ Before running your instance of **API**, you will need the following tools befor
 ```sh
 $ git clone https://github.com/NinoDiscord/API.git && cd API
 $ go get && go build
+$ ./api # or run api.exe in Command Prompt
 ```
 
 ## License
