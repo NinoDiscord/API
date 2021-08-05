@@ -5,6 +5,6 @@ RUN go get
 RUN go build
 
 FROM alpine:latest
-WORKDIR /
-COPY --from=builder /timeouts /app/timeouts
+WORKDIR /opt/Nino/api
+COPY --from=builder /api /opt/Nino/api
 CMD ["/app/api"]
