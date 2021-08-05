@@ -11,8 +11,8 @@ func ValidateEnv() {
 		logrus.Fatal("Environment variable `GO_ENV` was not defined.")
 	}
 
-	if os.Getenv("MASTER_KEY") == "" {
-		logrus.Fatal("Missing master key as `MASTER_KEY` environment variable.")
+	if os.Getenv("SIGNING_KEY") == "" {
+		logrus.Fatal("Missing JWT signing key as `SIGNING_KEY`")
 		os.Exit(1)
 	}
 

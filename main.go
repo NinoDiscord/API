@@ -21,6 +21,7 @@ func init() {
 	}
 
 	utils.ValidateEnv()
+	logrus.Infof("Running v%s of Nino API", version)
 }
 
 func main() {
