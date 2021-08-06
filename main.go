@@ -8,13 +8,14 @@ import (
 	"net/http"
 	"nino.sh/api/graphql"
 	"nino.sh/api/managers"
+	"nino.sh/api/metrics"
 	"nino.sh/api/redis"
 	"nino.sh/api/routers"
 	"nino.sh/api/utils"
 	"os"
 )
 
-var version = "1.1.0"
+var version = "0.2.0"
 
 func init() {
 	logrus.SetFormatter(&logrus.TextFormatter{})
@@ -52,8 +53,13 @@ func main() {
 		panic(err)
 	}
 
+	logrus.WithField("bootstrap", "Metrics").Info("Registering Metrics handler...")
+	m := metrics.NewMetrics()
+	m.Register()
+
 	router := chi.NewRouter()
 	router.Mount("/", routers.NewMainRouter())
+	router.Mount("/metrics", routers.NewMetricsRouter(m))
 	router.Mount("/health", routers.NewHealthRouter())
 	router.Mount("/graphql", routers.NewGraphQLRouter(gql))
 

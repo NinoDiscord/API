@@ -40,6 +40,10 @@ func (r *Resolver) CheckAuthorization(token string) error {
 					logrus.WithField("middleware", "Authentication").Fatalf("unable to invalidate token %s: %v", t.Raw, err)
 				}
 
+				if err == redis.Nil {
+					return ve.Inner
+				}
+
 				return err
 			}
 

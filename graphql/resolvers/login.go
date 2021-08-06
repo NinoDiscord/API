@@ -11,6 +11,7 @@ import (
 	"nino.sh/api/graphql/types"
 	"nino.sh/api/utils"
 	"os"
+	"time"
 )
 
 type User struct {
@@ -72,6 +73,7 @@ func (r *Resolver) Login(ctx context.Context, args struct{ AccessToken string })
 
 	claims["entry"] = entry
 	claims["user"] = user
+	claims["exp"] = time.Now().UTC().Add(time.Hour * 48).Unix()
 
 	t, err := token.SignedString(signingKey); if err != nil {
 		return nil, err
@@ -120,10 +122,16 @@ func (r *Resolver) Me(ctx context.Context) (*types.LoggedInUser, error) {
 		return nil, err
 	}
 
-	var loggedIn *types.LoggedInUser
+	var loggedIn *TokenizedUser
 	if err := json.Unmarshal([]byte(value.Val()), &loggedIn); err != nil {
 		return nil, err
 	}
 
-	return loggedIn, nil
+	return &types.LoggedInUser{
+		Discriminator: loggedIn.User.Discriminator,
+		Username:      loggedIn.User.Username,
+		Avatar:        loggedIn.User.Avatar,
+		Entry:         *loggedIn.Entry,
+		ID: 		   loggedIn.User.ID,
+	}, nil
 }

@@ -307,7 +307,7 @@ input AddBlacklistMetadata {
 type LoggedInUser {
     discriminator: String!
     username: String!
-    avatar: String!
+    avatar: String
     entry: User!
     id: String!
 }
