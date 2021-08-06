@@ -34,10 +34,12 @@ type Mutation {
     #toggleDehoist(id: String!): Boolean!
     #toggleSpam(id: String!): Boolean!
     #toggleRaid(id: String!): Boolean!
+    updateGuildLanguage(id: String!, language: String!): Boolean!
+    updateUserLanguage(id: String!, language: String!): Boolean!
     removeGuildPrefix(id: String!, prefix: String!): Boolean!
     addGuildPrefix(id: String!, prefix: String!): Boolean!
-    #removeUserPrefix(id: String!, prefix: String!): Boolean!
-    #addUserPrefix(id: String!, prefix: String!): Boolean!
+    removeUserPrefix(id: String!, prefix: String!): Boolean!
+    addUserPrefix(id: String!, prefix: String!): Boolean!
     updateModLog(id: String!, modlogID: String): Boolean!
     updateMutedRole(id: String!, roleID: String): Boolean!
     login(accessToken: String!): String

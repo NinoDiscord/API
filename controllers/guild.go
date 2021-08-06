@@ -180,6 +180,36 @@ func (c *Controller) UpdateMutedRole(
 	return true, nil
 }
 
+func (c *Controller) UpdateGuildLanguage(
+	context context.Context,
+	conn *sql.DB,
+	id string,
+	language string,
+) (bool, error) {
+	guild, err := c.GetGuild(context, conn, id); if err != nil {
+		return false, err
+	}
+
+	for _, lang := range utils.Languages() {
+		if language != lang {
+			return false, errors.New(fmt.Sprintf("language %s was not found.", language))
+		}
+	}
+
+	stmt, err := conn.PrepareContext(context, `
+		UPDATE guilds SET language = $1 WHERE guild_id = $2
+	`); if err != nil {
+		return false, err
+	}
+
+	_, err = stmt.Query(language, guild.ID)
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
 func GuildPrefixExists(guild *types.Guild, prefix string) bool {
 	for _, pre := range guild.Prefixes {
 		if prefix == pre {

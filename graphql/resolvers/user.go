@@ -5,7 +5,7 @@ import (
 	"nino.sh/api/graphql/types"
 )
 
-// User queries a user's metadata by it's ID, authentication is required on this query.
+// User queries a user's metadata by its ID, authentication is not required on this query.
 func (r *Resolver) User(ctx context.Context, args struct { ID string }) (*types.User, error) {
 	user, err := r.Controller.GetUser(ctx, r.Db.Connection, args.ID); if err != nil {
 		return nil, err
@@ -14,16 +14,26 @@ func (r *Resolver) User(ctx context.Context, args struct { ID string }) (*types.
 	return user, nil
 }
 
-/*
-func (r *Resolver) UpdateUser(id string) (string, error) {
-	return id, nil
+func (r *Resolver) AddUserPrefix(ctx context.Context, args struct { ID string; Prefix string }) (bool, error) {
+	if err := r.CheckAuthorization(ctx.Value("token").(string)); err != nil {
+		return false, err
+	}
+
+	return r.Controller.AddUserPrefix(ctx, r.Db.Connection, args.ID, args.Prefix)
 }
 
-func (r *Resolver) RemoveUserPrefix(id string) (string, error) {
-	return id, nil
+func (r *Resolver) RemoveUserPrefix(ctx context.Context, args struct { ID string; Prefix string }) (bool, error) {
+	if err := r.CheckAuthorization(ctx.Value("token").(string)); err != nil {
+		return false, err
+	}
+
+	return r.Controller.RemoveUserPrefix(ctx, r.Db.Connection, args.ID, args.Prefix)
 }
 
-func (r *Resolver) AddUserPrefix(id string) (string, error) {
-	return id, nil
+func (r *Resolver) UpdateUserLanguage(ctx context.Context, args struct { ID string; Language string }) (bool, error) {
+	if err := r.CheckAuthorization(ctx.Value("token").(string)); err != nil {
+		return false, err
+	}
+
+	return r.Controller.UpdateUserLanguage(ctx, r.Db.Connection, args.ID, args.Language)
 }
-*/

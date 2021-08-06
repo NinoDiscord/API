@@ -8,6 +8,16 @@ type PlaygroundTemplateData struct {
 	Endpoint string
 }
 
+var languages = []string{
+	"en_US",
+	"fr_FR",
+	"pt_BR",
+}
+
+func Languages() []string {
+	return languages
+}
+
 // Credits: Ice <3
 const PlaygroundTemplate = `
 {{ define "index" }}

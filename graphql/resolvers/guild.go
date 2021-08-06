@@ -45,3 +45,11 @@ func (r *Resolver) UpdateMutedRole(ctx context.Context, args struct{ ID string; 
 
 	return r.Controller.UpdateMutedRole(ctx, r.Db.Connection, args.ID, args.RoleID)
 }
+
+func (r *Resolver) UpdateGuildLanguage(ctx context.Context, args struct { ID string; Language string }) (bool, error) {
+	if err := r.CheckAuthorization(ctx.Value("token").(string)); err != nil {
+		return false, err
+	}
+
+	return r.Controller.UpdateGuildLanguage(ctx, r.Db.Connection, args.ID, args.Language)
+}

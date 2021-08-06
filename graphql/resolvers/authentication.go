@@ -3,7 +3,6 @@ package resolvers
 import (
 	"context"
 	"errors"
-	"fmt"
 	"github.com/go-redis/redis/v8"
 	"github.com/golang-jwt/jwt"
 	"github.com/sirupsen/logrus"
@@ -23,7 +22,6 @@ func (r *Resolver) CheckAuthorization(token string) error {
 	}
 
 	if t.Valid {
-		fmt.Println(t.Raw)
 		if err := r.Redis.Connection.HGet(context.TODO(), "nino:sessions", t.Raw).Err(); err != nil {
 			if err == redis.Nil {
 				return errors.New("token is invalid, please re-login! :D")

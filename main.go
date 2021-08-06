@@ -14,6 +14,8 @@ import (
 	"os"
 )
 
+var version = "1.1.0"
+
 func init() {
 	logrus.SetFormatter(&logrus.TextFormatter{})
 	err := godotenv.Load(".env"); if err != nil {
