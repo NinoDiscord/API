@@ -76,6 +76,9 @@ type Automod {
     # read more here: https://nino.sh/docs/automod#blacklist
     blacklist: Boolean!
 
+    # The guild's ID in which this automod entry belongs to.
+    guildId: String!
+
     # If the mentions automod feature is enabled,
     # read more here: https://nino.sh/docs/automod#mentions
     mentions: Boolean!
