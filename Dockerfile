@@ -7,4 +7,5 @@ RUN go build
 FROM alpine:latest
 WORKDIR /opt/Nino/api
 COPY --from=builder /api /opt/Nino/api
+COPY --from=builder /schema.gql /opt/Nino/api/schema.sql
 CMD ["/opt/Nino/api/api"]

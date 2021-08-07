@@ -29,7 +29,7 @@ func init() {
 
 func main() {
 	node := os.Getenv("REGION"); if node != "" {
-		logrus.Infof("Running on region %s. :3", node)
+		logrus.Infof("Running on node %s. :3", node)
 	}
 
 	logrus.WithField("bootstrap", "Postgres").Info("Connecting to PostgreSQL...")
