@@ -62,6 +62,7 @@ func main() {
 	router.Mount("/metrics", routers.NewMetricsRouter(m))
 	router.Mount("/health", routers.NewHealthRouter())
 	router.Mount("/graphql", routers.NewGraphQLRouter(gql))
+	router.Mount("/web-vitals", routers.NewWebVitalsRouter(m))
 
 	logrus.WithField("bootstrap", "Http").Info("Listening at http://localhost:6645!")
 	log.Fatal(http.ListenAndServe(":6645", router))

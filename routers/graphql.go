@@ -30,8 +30,8 @@ func NewGraphQLRouter(handler *graphql.Manager) chi.Router {
 			return
 		}
 
-		utils.SendJson(w, 404, utils.Response{
-			Message: "Cannot GET /graphql",
+		utils.SendJson(w, 405, utils.Response{
+			Message: "/graphql should be only used in POST requests.",
 		})
 	})
 

@@ -1,0 +1,39 @@
+name: Linting
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'feature/**'
+      - 'issue/gh-**'
+      - staging
+      - master
+    paths-ignore:
+      - '.github/**'
+      - .gitignore
+      - LICENSE
+      - '**.md'
+      - renovate.json
+      - schema.gql
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Installs Go 1.16
+        uses: actions/setup-go@v2
+        with:
+          go-version: ^1.16
+
+      - name: Fetch dependencies
+        run: go get
+
+      - name: Build project
+        run: go build -o ./bin/api
+
+      - name: Clean module cache
+        run: go clean -modcache
+
+      - name: Lint
+        uses: golangci/golangci-lint-action@v2

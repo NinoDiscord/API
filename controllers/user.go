@@ -10,6 +10,8 @@ import (
 	"nino.sh/api/utils"
 )
 
+type UserController struct {}
+
 func (c *Controller) GetUsers(
 	ctx context.Context,
 	connection *sql.DB,
@@ -56,6 +58,10 @@ func (c *Controller) GetUser(
 		return nil, err
 	}
 
+	if id == "" {
+		return nil, errors.New("id must be specified")
+	}
+
 	var user *types.User
 	for _, u := range users {
 		if u.ID == id {
@@ -75,6 +81,10 @@ func (c *Controller) AddUserPrefix(
 ) (bool, error) {
 	user, err := c.GetUser(context, conn, id); if err != nil {
 		return false, err
+	}
+
+	if id == "" {
+		return false, errors.New("id must be specified")
 	}
 
 	if userPrefixExists(user, prefix) {
@@ -105,6 +115,10 @@ func (c *Controller) RemoveUserPrefix(
 		return false, err
 	}
 
+	if id == "" {
+		return false, errors.New("id must be specified")
+	}
+
 	if !userPrefixExists(user, prefix) {
 		return false, errors.New(fmt.Sprintf("prefix %s was not a prefix", prefix))
 	}
@@ -131,6 +145,10 @@ func (c *Controller) UpdateUserLanguage(
 ) (bool, error) {
 	user, err := c.GetUser(context, conn, id); if err != nil {
 		return false, err
+	}
+
+	if id == "" {
+		return false, errors.New("id must be specified")
 	}
 
 	for _, lang := range utils.Languages() {

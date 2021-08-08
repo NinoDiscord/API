@@ -10,6 +10,8 @@ import (
 	"nino.sh/api/utils"
 )
 
+type GuildController struct {}
+
 // GetGuilds returns an array of types.Guild objects
 func (c *Controller) GetGuilds(
 	context context.Context,
@@ -65,6 +67,10 @@ func (c *Controller) GetGuild(
 		return nil, err
 	}
 
+	if id == "" {
+		return nil, errors.New("id must be specified")
+	}
+
 	var guild *types.Guild
 	for _, g := range guilds {
 		if g.ID == id {
@@ -84,6 +90,10 @@ func (c *Controller) AddGuildPrefix(
 ) (bool, error) {
 	guild, err := c.GetGuild(context, conn, id); if err != nil {
 		return false, err
+	}
+
+	if id == "" {
+		return false, errors.New("id must be specified")
 	}
 
 	if GuildPrefixExists(guild, prefix) {
@@ -114,6 +124,10 @@ func (c *Controller) RemoveGuildPrefix(
 		return false, err
 	}
 
+	if id == "" {
+		return false, errors.New("id must be specified")
+	}
+
 	if !GuildPrefixExists(guild, prefix) {
 		return false, errors.New(fmt.Sprintf("prefix %s was not a  prefix", prefix))
 	}
@@ -142,6 +156,10 @@ func (c *Controller) UpdateModLog(
 		return false, err
 	}
 
+	if id == "" {
+		return false, errors.New("id must be specified")
+	}
+
 	stmt, err := conn.PrepareContext(context, `
 		UPDATE guilds SET modlog_channel_id = $1 WHERE guild_id = $2
 	`); if err != nil {
@@ -166,6 +184,10 @@ func (c *Controller) UpdateMutedRole(
 		return false, err
 	}
 
+	if id == "" {
+		return false, errors.New("id must be specified")
+	}
+
 	stmt, err := conn.PrepareContext(context, `
 		UPDATE guilds SET muted_role_id = $1 WHERE guild_id = $2
 	`); if err != nil {
@@ -188,6 +210,10 @@ func (c *Controller) UpdateGuildLanguage(
 ) (bool, error) {
 	guild, err := c.GetGuild(context, conn, id); if err != nil {
 		return false, err
+	}
+
+	if id == "" {
+		return false, errors.New("id must be specified")
 	}
 
 	for _, lang := range utils.Languages() {

@@ -3,14 +3,17 @@ package controllers
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"nino.sh/api/graphql/types"
 	"nino.sh/api/utils"
 )
 
-// GetAutomodForAllGuilds returns an array of types.Automod objects.
-func (c *Controller) GetAutomodForAllGuilds(
+type AutomodController struct {}
+
+// GetAll returns an array of types.Automod objects.
+func (c *AutomodController) GetAll(
 	ctx context.Context,
-	conn *sql.Conn,
+	conn *sql.DB,
 ) ([]*types.Automod, error) {
 	stmt, err := conn.PrepareContext(ctx, `
 		select automod.blacklist, automod.mentions, automod.invites, automod.dehoist,
@@ -70,6 +73,30 @@ func (c *Controller) GetAutomodForAllGuilds(
 			Spam: spam,
 			Raid: raid,
 		})
+	}
+
+	return automod, nil
+}
+
+func (c *AutomodController) Get(
+	ctx context.Context,
+	conn *sql.DB,
+	id string,
+) (*types.Automod, error) {
+	objects, err := c.GetAll(ctx, conn); if err != nil {
+		return nil, err
+	}
+
+	if id == "" {
+		return nil, errors.New("id must be specified")
+	}
+
+	var automod *types.Automod
+	for _, auto := range objects {
+		if auto.GuildId == id {
+			automod = auto
+			break
+		}
 	}
 
 	return automod, nil

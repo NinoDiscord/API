@@ -28,6 +28,7 @@ type User struct {
 }
 
 type TokenizedUser struct {
+	Guilds []types.PartialGuild
 	Entry *types.User
 	User  User
 }
@@ -66,6 +67,22 @@ func (r *Resolver) Login(ctx context.Context, args struct{ AccessToken string })
 		return nil, err
 	}
 
+	// Return a list of the user's guilds
+	req, err = http.NewRequest("GET", "https://discord.com/api/v9/users/@me/guilds", nil); if err != nil {
+		return nil, err
+	}
+
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", args.AccessToken))
+	resp, err = client.Do(req); if err != nil {
+		return nil, err
+	}
+	defer utils.SwallowHttpError(resp.Body)
+
+	var guilds []types.PartialGuild
+	if err := json.NewDecoder(resp.Body).Decode(&guilds); err != nil {
+		return nil, err
+	}
+
 	// get db entry
 	entry, err := r.Controller.GetUser(ctx, r.Db.Connection, user.ID); if err != nil {
 		return nil, err
@@ -83,6 +100,7 @@ func (r *Resolver) Login(ctx context.Context, args struct{ AccessToken string })
 	if _, err := r.Redis.Connection.HSet(ctx, "nino:sessions", t, &TokenizedUser{
 		User: user,
 		Entry: entry,
+		Guilds: guilds,
 	}).Result(); err != nil {
 		return nil, err
 	}
@@ -131,6 +149,7 @@ func (r *Resolver) Me(ctx context.Context) (*types.LoggedInUser, error) {
 		Discriminator: loggedIn.User.Discriminator,
 		Username:      loggedIn.User.Username,
 		Avatar:        loggedIn.User.Avatar,
+		Guilds:        loggedIn.Guilds,
 		Entry:         *loggedIn.Entry,
 		ID: 		   loggedIn.User.ID,
 	}, nil

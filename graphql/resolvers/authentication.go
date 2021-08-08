@@ -10,6 +10,10 @@ import (
 )
 
 func (r *Resolver) CheckAuthorization(token string) error {
+	if token == "" {
+		return errors.New("missing `Authorization` header in request")
+	}
+
 	signingKey := []byte(os.Getenv("SIGNING_KEY"))
 	t, err := jwt.Parse(token, func (token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {

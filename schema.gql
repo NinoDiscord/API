@@ -5,7 +5,7 @@ type Query {
     #warning(guild: String!, user: String!): [Warning!]!
     #blacklist(id: String!): Blacklist
     #logging(id: String!): Logging
-    #automod(id: String!): Automod
+    automod(id: String!): Automod
     guild(id: String!): Guild
     #cases(guild: String!): [Case!]!
     #case(guild: String!, id: Int!): Case
@@ -311,6 +311,16 @@ type LoggedInUser {
     discriminator: String!
     username: String!
     avatar: String
+    guilds: [PartialGuild!]!
     entry: User!
+    id: String!
+}
+
+type PartialGuild {
+    permissions: String!
+    features: [String!]!
+    owner: Boolean!
+    icon: String
+    name: String!
     id: String!
 }

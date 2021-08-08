@@ -26,6 +26,11 @@ var (
 		Name: "nino_api_request_latency",
 		Help: "How much latency did the HTTP request take.",
 	}, []string{"status_code", "method", "path"})
+
+	WebVitalMetric = prometheus.NewHistogramVec(prometheus.HistogramOpts{
+		Name: "nino_api_web_vitals",
+		Help: "Web vital information to track TTFB, FCP, etc.",
+	}, []string{"name"})
 )
 
 // NewMetrics initializes a new Metrics struct.
@@ -47,7 +52,7 @@ func NewMetrics() *Metrics {
 // Register registers all counters / gauge / histograms.
 func (m *Metrics) Register() {
 	logrus.WithField("type", "Prometheus").Info("Registering metrics...")
-	prometheus.MustRegister(RequestsMetric, RequestLatencyMetric)
+	prometheus.MustRegister(RequestsMetric, RequestLatencyMetric, WebVitalMetric)
 }
 
 // IncRequest increments the RequestsMetric.
@@ -58,4 +63,8 @@ func (m *Metrics) IncRequest(status int, method string, path string) {
 // ObserveLatency observes the latency into the RequestLatencyMetric histogram.
 func (m *Metrics) ObserveLatency(start time.Time, status int, method string, path string) {
 	RequestLatencyMetric.WithLabelValues(strconv.Itoa(status), method, path).Observe(float64(time.Since(start).Nanoseconds() / 1000000))
+}
+
+func (m *Metrics) SetWebVital(name string, value float32) {
+	WebVitalMetric.WithLabelValues(name).Observe(float64(value))
 }

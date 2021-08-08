@@ -4,7 +4,9 @@
 </div>
 
 <div align='center'>
-  <img alt='api.nino.sh Workflow' src='https://img.shields.io/github/workflow/status/NinoDiscord/API/Deploy%20to%20Kubernetes/master?style=flat-square' />
+  <img alt='api.nino.sh Workflow' src='https://img.shields.io/github/workflow/status/NinoDiscord/API/Linting/master?style=flat-square' />
+  <img alt="GitHub License" src="https://img.shields.io/github/license/NinoDiscord/API?style=flat-square" />
+  <img alt="Noelware Server" src="https://discord.com/api/v9/guilds/824066105102303232/widget.png?style=shield" />
 </div>
 
 <hr />

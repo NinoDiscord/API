@@ -42,7 +42,7 @@ func (gql *Manager) GenerateSchema() error {
 	schema := graphql.MustParseSchema(items, &resolvers.Resolver{
 		Db: gql.Postgres,
 		Redis: gql.Redis,
-		Controller: &controllers.Controller{},
+		Controller: controllers.NewController(),
 	}, opts...)
 
 	gql.Schema = schema

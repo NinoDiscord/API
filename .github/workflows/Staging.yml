@@ -1,11 +1,9 @@
-name: Deploy to Kubernetes
+name: Production
 on:
   workflow_dispatch:
   push:
     branches:
-      - 'feature/**'
-      - 'issue/gh-**'
-      - master
+      - staging
     paths-ignore:
       - '.github/**'
       - .gitignore
@@ -34,9 +32,7 @@ jobs:
           echo "${{ secrets.KUBE_CONFIG }}" > ~/.kube/config
       - name: Set image
         run: |
-          kubectl set image deployment/nino-prod-api nino-prod-api=registry.floofy.dev/nino/api:${{github.sha}}
           kubectl set image deployment/nino-edge-api nino-edge-api=registry.floofy.dev/nino/api:${{github.sha}}
       - name: Rollout status
         run: |
-          kubectl rollout status deployment/nino-prod-api
           kubectl rollout status deployment/nino-edge-api

@@ -1,14 +1,19 @@
 package resolvers
 
+import (
+	"context"
+	"nino.sh/api/graphql/types"
+)
+
+func (r *Resolver) Automod(ctx context.Context, args struct { ID string }) (*types.Automod, error) {
+	if err := r.CheckAuthorization(ctx.Value("token").(string)); err != nil {
+		return nil, err
+	}
+
+	return r.Controller.Automod.Get(ctx, r.Db.Connection, args.ID)
+}
+
 /*
-type Query struct {
-	ID string
-}
-
-func (r *Resolver) Automod(ctx context.Context, args Query) (string, error) {
-	return "Hi world :3", nil
-}
-
 func (r *Resolver) ToggleShortlinks(id string) (string, error) {
 	return id, nil
 }
