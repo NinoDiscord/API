@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"github.com/lib/pq"
 	"nino.sh/api/graphql/types"
 	"nino.sh/api/utils"
 )
@@ -17,7 +18,7 @@ func (c *AutomodController) GetAll(
 ) ([]*types.Automod, error) {
 	stmt, err := conn.PrepareContext(ctx, `
 		select automod.blacklist, automod.mentions, automod.invites, automod.dehoist,
-		automod.guild_id, automod.spam, automod.raid, automod.blacklist_words, automod.short_links,
+		automod.guild_id, automod.spam, automod.raid, automod.short_links,
 		automod.whitelist_channels_during_raid from automod
 	`); if err != nil {
 		return nil, err
@@ -39,7 +40,6 @@ func (c *AutomodController) GetAll(
 			guildId string
 			spam bool
 			raid bool
-			blacklistWords []string
 			shortLinks bool
 			whitelistChannels []string
 		)
@@ -52,9 +52,8 @@ func (c *AutomodController) GetAll(
 			&guildId,
 			&spam,
 			&raid,
-			&blacklistWords,
 			&shortLinks,
-			&whitelistChannels,
+			pq.Array(&whitelistChannels),
 		)
 
 		if err != nil {
@@ -63,7 +62,6 @@ func (c *AutomodController) GetAll(
 
 		automod = append(automod, &types.Automod{
 			WhitelistChannels: whitelistChannels,
-			BlacklistedWords: blacklistWords,
 			ShortLinks: shortLinks,
 			Blacklist: blacklist,
 			Mentions: mentions,

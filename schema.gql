@@ -68,6 +68,10 @@ type Guild {
 # Represents a object of a guild's automod features
 # This doesn't include the blacklisted words, if any.
 type Automod {
+    # Returns a list of channel IDs that are excluded
+    # in raids. Read more here: https://nino.sh/docs/automod#raid
+    whitelistChannels: [String!]!
+
     # If the shortlinks automod feature is enabled,
     # read more here: https://nino.sh/docs/automod#shortlinks
     shortLinks: Boolean!
