@@ -34,6 +34,3 @@ jobs:
 
       - name: Clean module cache
         run: go clean -modcache
-
-      - name: Lint
-        uses: golangci/golangci-lint-action@v2
