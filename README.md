@@ -1,3 +1,5 @@
+⚠️ **Warning** - This repository has been archived due to it being merged with the [main bot](https://github.com/NinoDiscord/Nino) under the [bot/api](https://github.com/NinoDiscord/Nino/tree/master/bot/api) folder. Thanks!
+
 <div align="center">
     <h3>Nino API</h3>
     <blockquote><strong>Source code for Nino's API (located at <a href="https://api.nino.sh">api.nino.sh</a>), made with Go and GraphQL 💜</strong></blockquote>
